@@ -14,7 +14,7 @@
     <div class="list-group list-group-flush">
         @can('view dashboard')
         <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <i class="bi bi-speedometer2"></i> Dashboard
+            <i class="bi bi-speedometer2 me-2"></i> Dashboard
         </a>
         @endcan
         
@@ -107,6 +107,18 @@
             @endcan
         </div>
         @endcanany
+        
+        @can('manage school information')
+        <a href="{{ route('admin.school-information.edit') }}" class="list-group-item list-group-item-action {{ request()->routeIs('admin.school-information.*') ? 'active' : '' }}">
+            <i class="bi bi-gear me-2"></i> School Information
+        </a>
+        @endcan
+        
+        @can('view subject assignments')
+        <a href="{{ route('subject-assignments.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('subject-assignments.*') ? 'active' : '' }}">
+            <i class="bi bi-journal-check me-2"></i> Subject Assignments
+        </a>
+        @endcan
         
         @can('view reports')
         <a href="#reportsSubmenu" data-bs-toggle="collapse" aria-expanded="{{ request()->routeIs('reports.*') ? 'true' : 'false' }}" class="list-group-item list-group-item-action {{ request()->routeIs('reports.*') ? 'active' : '' }} dropdown-toggle">

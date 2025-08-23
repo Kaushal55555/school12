@@ -14,13 +14,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
   {
     $this->call([
-        SchoolInformationSeeder::class, // Add this line
+        SchoolInformationSeeder::class,
         SchoolClassSeeder::class,
         SubjectSeeder::class,
-        TeacherSeeder::class, // Add TeacherSeeder after SchoolClass and Subject seeders
+        TeacherSeeder::class,
         StudentSeeder::class,
         ResultSeeder::class,
         RoleAndPermissionSeeder::class,
+        PermissionTableSeeder::class, // Add the new PermissionTableSeeder
         AdminUserSeeder::class,
     ]);
   }

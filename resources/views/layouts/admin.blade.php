@@ -13,15 +13,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --sidebar-width: 250px;
+        }
         body {
             font-family: 'Nunito', sans-serif;
             background-color: #f8f9fc;
         }
         .sidebar {
             min-height: 100vh;
+            width: var(--sidebar-width);
             background: #4e73df;
             background: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
             color: white;
+            position: fixed;
+            z-index: 1000;
+        }
+        #page-content-wrapper {
+            min-width: 0;
+            width: calc(100% - var(--sidebar-width));
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s;
         }
         .sidebar .nav-link {
             color: rgba(255, 255, 255, 0.8);

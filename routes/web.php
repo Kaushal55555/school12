@@ -8,6 +8,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\SchoolInformationController;
 use App\Http\Controllers\ReportController;
 
 // Authentication Routes
@@ -46,6 +47,27 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/results', [ResultController::class, 'index'])->name('results.index');
         Route::resource('classes', SchoolClassController::class);
         Route::resource('teachers', \App\Http\Controllers\TeacherController::class);
+        
+        // Subject Assignments
+        Route::resource('subject-assignments', \App\Http\Controllers\SubjectAssignmentController::class);
+        
+        // API Routes for subject assignments
+        Route::get('/api/check-class-teacher/{teacherId}/{classId}/{academicYear}/{term}', function ($teacherId, $classId, $academicYear, $term) {
+            $isClassTeacher = \App\Models\SubjectAssignment::where('teacher_id', $teacherId)
+                ->where('class_id', $classId)
+                ->where('academic_year', $academicYear)
+                ->where('term', $term)
+                ->where('is_class_teacher', true)
+                ->exists();
+                
+            return response()->json(['is_class_teacher' => $isClassTeacher]);
+        })->name('api.check-class-teacher');
+
+        // School Information Routes
+        Route::prefix('admin/school-information')->name('admin.school-information.')->group(function () {
+            Route::get('/', [SchoolInformationController::class, 'edit'])->name('edit');
+            Route::put('/', [SchoolInformationController::class, 'update'])->name('update');
+        });
 
         // Report Routes
         Route::prefix('reports')->name('reports.')->group(function () {

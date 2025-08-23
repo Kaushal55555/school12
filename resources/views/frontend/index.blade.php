@@ -15,9 +15,19 @@
                         <i class="bi bi-search me-2"></i> Check Results
                     </a>
                     @guest
-                    <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg px-4">
-                        <i class="bi bi-box-arrow-in-right me-2"></i> Admin Login
-                    </a>
+                    <div class="dropdown d-inline-block ms-2">
+                        <button class="btn btn-outline-light btn-lg px-4 dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="loginDropdown">
+                            <li><h6 class="dropdown-header">Login As</h6></li>
+                            <li><a class="dropdown-item" href="/teacher/login"><i class="bi bi-person-video3 me-2"></i> Teacher Login</a></li>
+                            <li><a class="dropdown-item" href="/student/login"><i class="bi bi-person-vcard me-2"></i> Student Login</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ route('register') }}"><i class="bi bi-person-plus me-2"></i> Register</a></li>
+                            <li><a class="dropdown-item" href="{{ route('password.request') }}"><i class="bi bi-question-circle me-2"></i> Forgot Password?</a></li>
+                        </ul>
+                    </div>
                     @endguest
                 </div>
             </div>
