@@ -20,4 +20,12 @@ class Subject extends Model
     {
         return $this->hasMany(Result::class, 'subject_id');
     }
+
+    /**
+     * Get the subject assignments for the subject.
+     */
+    public function subjectAssignments()
+    {
+        return $this->hasMany(SubjectAssignment::class);
+    }
 }

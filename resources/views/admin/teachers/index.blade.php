@@ -23,6 +23,14 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
+                    <style>
+                        .table-hover tbody tr:hover td {
+                            background-color: #f8f9fa;
+                        }
+                        .table-hover tbody tr:hover td:last-child {
+                            background-color: transparent;
+                        }
+                    </style>
                     <thead class="thead-light">
                         <tr>
                             <th>Photo</th>
@@ -60,28 +68,26 @@
                                         {{ $teacher->is_active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('teachers.show', $teacher) }}" 
-                                           class="btn btn-sm btn-info" 
-                                           title="View">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('teachers.edit', $teacher) }}" 
-                                           class="btn btn-sm btn-primary" 
-                                           title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('teachers.destroy', $teacher) }}" 
-                                              method="POST" 
-                                              class="d-inline"
-                                              onsubmit="return confirm('Are you sure you want to delete this teacher?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                                <td class="p-2">
+                                    <div class="flex space-x-2">
+                                    <a href="{{ route('teachers.show', $teacher) }}" 
+                                       class="bg-cyan-400 text-white px-3 py-1 rounded hover:bg-cyan-500 text-sm">
+                                        View
+                                    </a>
+                                    <a href="{{ route('teachers.edit', $teacher) }}" 
+                                       class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('teachers.destroy', $teacher) }}" 
+                                          method="POST" 
+                                          onsubmit="return confirm('Are you sure you want to delete this teacher?');" 
+                                          class="m-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">
+                                            Delete
+                                        </button>
+                                    </form>
                                     </div>
                                 </td>
                             </tr>

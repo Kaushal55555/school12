@@ -24,7 +24,19 @@
         
         <!-- Right Navigation Items -->
         <div class="d-flex align-items-center">
-            <!-- Notifications Dropdown -->
+            @guest
+                <!-- Guest Navigation -->
+                <div class="d-flex align-items-center">
+                    <a href="{{ route('teacher.login') }}" class="btn btn-outline-primary me-2">
+                        Teacher Login
+                    </a>
+                    <a href="{{ route('teacher.register') }}" class="btn btn-primary">
+                        Teacher Register
+                    </a>
+                </div>
+            @else
+                <!-- Authenticated User Navigation -->
+                <!-- Notifications Dropdown -->
             <div class="dropdown me-3">
                 <a class="position-relative text-dark" href="#" role="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-bell fs-5"></i>
@@ -98,7 +110,34 @@
                 </div>
             </div>
             
-            <!-- User Dropdown -->
+            @if(auth()->user()->hasRole('teacher'))
+            <!-- Teacher Dropdown -->
+            <div class="dropdown">
+                <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="teacherDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="me-2 d-none d-lg-block text-end">
+                        <div class="fw-medium">{{ Auth::user()->name }}</div>
+                        <small class="text-muted">Teacher</small>
+                    </div>
+                    <div class="avatar-sm rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center">
+                        <i class="bi bi-person-fill text-primary"></i>
+                    </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="teacherDropdown">
+                    <li><a class="dropdown-item" href="{{ route('teacher.profile') }}"><i class="bi bi-person me-2"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('teacher.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form method="POST" action="{{ route('teacher.logout') }}" class="mb-0">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                <i class="bi bi-box-arrow-right me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            @else
+            <!-- Regular User Dropdown -->
             <div class="dropdown">
                 <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="me-2 d-none d-lg-block text-end">
@@ -129,6 +168,8 @@
                     </li>
                 </ul>
             </div>
+            @endif
+            @endguest
         </div>
     </div>
 </nav>

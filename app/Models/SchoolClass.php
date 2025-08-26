@@ -25,4 +25,12 @@ class SchoolClass extends Model
     {
         return $this->hasMany(Result::class, 'class_id');
     }
+
+    /**
+     * Get the subject assignments for the class.
+     */
+    public function subjectAssignments()
+    {
+        return $this->hasMany(SubjectAssignment::class, 'class_id');
+    }
 }

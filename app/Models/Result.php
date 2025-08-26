@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\SchoolClass;
+use App\Models\Exam;
 
 class Result extends Model
 {
@@ -40,6 +44,7 @@ class Result extends Model
         'attendance' => 'integer',
         'published_at' => 'datetime',
     ];
+
 
     protected static function boot()
     {

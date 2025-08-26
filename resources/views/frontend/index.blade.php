@@ -14,8 +14,11 @@
                     <a href="{{ route('public.results') }}" class="btn btn-light btn-lg px-4">
                         <i class="bi bi-search me-2"></i> Check Results
                     </a>
+                    <a href="{{ route('teacher.login') }}" class="btn btn-outline-light btn-lg px-4 ms-2">
+                        <i class="bi bi-person-video3 me-2"></i> Teacher Login
+                    </a>
                     @guest
-                    <div class="dropdown d-inline-block ms-2">
+                    <div class="dropdown d-inline-block ms-2 d-none">
                         <button class="btn btn-outline-light btn-lg px-4 dropdown-toggle" type="button" id="loginDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-box-arrow-in-right me-2"></i> Login
                         </button>

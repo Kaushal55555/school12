@@ -14,6 +14,52 @@ use App\Http\Controllers\ReportController;
 // Authentication Routes
 require __DIR__.'/auth.php';
 
+// Teacher Authentication Routes
+Route::prefix('teacher')->name('teacher.')->group(function () {
+    // Guest routes (not authenticated)
+    Route::middleware('guest:web')->group(function () {
+        Route::get('/login', [\App\Http\Controllers\Teacher\Auth\LoginController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [\App\Http\Controllers\Teacher\Auth\LoginController::class, 'login']);
+        Route::get('/register', [\App\Http\Controllers\Teacher\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
+        Route::post('/register', [\App\Http\Controllers\Teacher\Auth\RegisterController::class, 'register']);
+    });
+
+    // Authenticated teacher routes
+    Route::middleware(['auth', 'teacher'])->group(function () {
+        Route::post('/logout', [\App\Http\Controllers\Teacher\Auth\LoginController::class, 'logout'])->name('logout');
+        
+        // Dashboard
+        Route::get('/dashboard', [\App\Http\Controllers\Teacher\DashboardController::class, 'index'])->name('dashboard');
+        
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\Teacher\DashboardController::class, 'profile'])->name('profile');
+        Route::put('/profile', [\App\Http\Controllers\Teacher\DashboardController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/password/update', [\App\Http\Controllers\Teacher\DashboardController::class, 'updatePassword'])->name('password.update');
+        
+        // Attendance Routes
+        Route::prefix('attendance')->name('attendance.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Teacher\AttendanceController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\Teacher\AttendanceController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\Teacher\AttendanceController::class, 'store'])->name('store');
+            Route::get('/class/{classId}', [\App\Http\Controllers\Teacher\AttendanceController::class, 'classAttendance'])->name('class');
+            Route::get('/{classId}/date/{date}', [\App\Http\Controllers\Teacher\AttendanceController::class, 'show'])->name('show');
+        });
+        
+        // Class Students Routes
+        Route::prefix('classes')->name('classes.')->group(function () {
+            Route::get('/{classId}/students', [\App\Http\Controllers\Teacher\ClassController::class, 'students'])->name('students');
+            Route::get('/{classId}/students/export', [\App\Http\Controllers\Teacher\ClassController::class, 'exportStudents'])->name('students.export');
+        });
+        
+        // Marks Management Routes
+        Route::prefix('marks')->name('marks.')->group(function () {
+            Route::get('/class/{classId}/subject/{subjectId}', [\App\Http\Controllers\Teacher\MarkController::class, 'index'])->name('index');
+            Route::post('/store', [\App\Http\Controllers\Teacher\MarkController::class, 'store'])->name('store');
+            Route::put('/{mark}', [\App\Http\Controllers\Teacher\MarkController::class, 'update'])->name('update');
+        });
+    });
+});
+
 // Frontend Routes (Public)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
