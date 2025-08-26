@@ -41,7 +41,7 @@
                 <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-blue-400 text-white rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-4 shadow-lg">
                     <i class="fas fa-user-shield"></i>
                 </div>
-                <!-- <h1 class="text-3xl font-bold text-gray-800">SchoolSys</h1> -->
+                <h1 class="text-3xl font-bold text-gray-800">SchoolSys</h1>
                 <p class="text-gray-500 mt-1">School Management System</p>
             </div>
             

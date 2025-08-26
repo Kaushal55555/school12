@@ -10,8 +10,20 @@ use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\SchoolInformationController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 
-// Authentication Routes
+// Admin Authentication Routes - Using standard /login route
+Route::middleware('guest:admin')->group(function () {
+    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminLoginController::class, 'login']);
+});
+
+Route::middleware('auth:admin')->group(function () {
+    Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
+    // Add other admin protected routes here
+});
+
+// Regular authentication routes (for teachers/other users)
 require __DIR__.'/auth.php';
 
 // Teacher Authentication Routes
@@ -91,45 +103,61 @@ Route::middleware('auth')->group(function () {
         Route::resource('subjects', SubjectController::class);
         Route::resource('results', ResultController::class)->except(['index']);
         Route::get('/admin/results', [ResultController::class, 'index'])->name('results.index');
-        Route::resource('classes', SchoolClassController::class);
-        Route::resource('teachers', \App\Http\Controllers\TeacherController::class);
         
         // Subject Assignments
         Route::resource('subject-assignments', \App\Http\Controllers\SubjectAssignmentController::class);
         
-        // API Routes for subject assignments
-        Route::get('/api/check-class-teacher/{teacherId}/{classId}/{academicYear}/{term}', function ($teacherId, $classId, $academicYear, $term) {
-            $isClassTeacher = \App\Models\SubjectAssignment::where('teacher_id', $teacherId)
-                ->where('class_id', $classId)
-                ->where('academic_year', $academicYear)
-                ->where('term', $term)
-                ->where('is_class_teacher', true)
-                ->exists();
-                
-            return response()->json(['is_class_teacher' => $isClassTeacher]);
-        })->name('api.check-class-teacher');
-
+        // Teachers Management (Admin only)
+        Route::resource('teachers', \App\Http\Controllers\TeacherController::class);
+        
         // School Information Routes
         Route::prefix('admin/school-information')->name('admin.school-information.')->group(function () {
             Route::get('/', [SchoolInformationController::class, 'edit'])->name('edit');
             Route::put('/', [SchoolInformationController::class, 'update'])->name('update');
         });
-
-        // Report Routes
-        Route::prefix('reports')->name('reports.')->group(function () {
-            Route::get('/students', [ReportController::class, 'students'])->name('students');
-            Route::get('/results', [ReportController::class, 'results'])->name('results');
-            Route::post('/filter-students', [ReportController::class, 'filterStudents'])->name('filter.students');
-            Route::post('/filter-results', [ReportController::class, 'filterResults'])->name('filter.results');
-        });
-
-        // Print Results Route
-        Route::get('/results/print', [ResultController::class, 'print'])->name('results.print');
-        
-        // AJAX Routes for Results
-        Route::get('/get-subjects/{classId}', [ResultController::class, 'getSubjects'])->name('get.subjects');
-        Route::get('/get-students/{classId}', [ResultController::class, 'getStudents'])->name('get.students');
     });
+    
+    // Classes Routes
+    Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(function () {
+        Route::prefix('classes')->name('classes.')->group(function () {
+            Route::get('/', [SchoolClassController::class, 'index'])->name('index');
+            Route::get('/create', [SchoolClassController::class, 'create'])->name('create');
+            Route::post('/', [SchoolClassController::class, 'store'])->name('store');
+            Route::get('/{class}', [SchoolClassController::class, 'show'])->name('show');
+            Route::get('/{class}/edit', [SchoolClassController::class, 'edit'])->name('edit');
+            Route::put('/{class}', [SchoolClassController::class, 'update'])->name('update');
+            Route::delete('/{class}', [SchoolClassController::class, 'destroy'])->name('destroy');
+        });
+    });
+});
+
+// API Routes for subject assignments
+Route::get('/api/check-class-teacher/{teacherId}/{classId}/{academicYear}/{term}', function ($teacherId, $classId, $academicYear, $term) {
+    $isClassTeacher = \App\Models\SubjectAssignment::where('teacher_id', $teacherId)
+        ->where('class_id', $classId)
+        ->where('academic_year', $academicYear)
+        ->where('term', $term)
+        ->where('is_class_teacher', true)
+        ->exists();
+        
+    return response()->json(['is_class_teacher' => $isClassTeacher]);
+})->name('api.check-class-teacher');
+
+// Report Routes
+Route::middleware('auth')->group(function () {
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/students', [ReportController::class, 'students'])->name('students');
+        Route::get('/results', [ReportController::class, 'results'])->name('results');
+        Route::post('/filter-students', [ReportController::class, 'filterStudents'])->name('filter.students');
+        Route::post('/filter-results', [ReportController::class, 'filterResults'])->name('filter.results');
+    });
+
+    // Print Results Route
+    Route::get('/results/print', [ResultController::class, 'print'])->name('results.print');
+    
+    // AJAX Routes for Results
+    Route::get('/get-subjects/{classId}', [ResultController::class, 'getSubjects'])->name('get.subjects');
+    Route::get('/get-students/{classId}', [ResultController::class, 'getStudents'])->name('get.students');
 });
 
 require __DIR__.'/auth.php';

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class SchoolClass extends Model
 {
@@ -32,5 +33,30 @@ class SchoolClass extends Model
     public function subjectAssignments()
     {
         return $this->hasMany(SubjectAssignment::class, 'class_id');
+    }
+
+    /**
+     * Determine if the user can view the class.
+     */
+    public function viewableBy(User $user): bool
+    {
+        return $user->hasRole('admin') || 
+               $this->subjectAssignments()->where('teacher_id', $user->id)->exists();
+    }
+
+    /**
+     * Determine if the user can update the class.
+     */
+    public function updatableBy(User $user): bool
+    {
+        return $user->hasRole('admin');
+    }
+
+    /**
+     * Determine if the user can delete the class.
+     */
+    public function deletableBy(User $user): bool
+    {
+        return $user->hasRole('admin');
     }
 }

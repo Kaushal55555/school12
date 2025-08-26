@@ -57,7 +57,13 @@
                                 <label class="form-label">Grade</label>
                                 <div class="form-control">
                                     <span id="gradeBadge" class="badge">{{ $result->grade }}</span>
-                                    <span id="percentage" class="ms-2">{{ number_format(($result->marks_obtained / $result->subject->full_marks) * 100, 2) }}%</span>
+                                    <span id="percentage" class="ms-2">
+                                        @if($result->subject->full_marks > 0)
+                                            {{ number_format(($result->marks_obtained / $result->subject->full_marks) * 100, 2) }}%
+                                        @else
+                                            N/A
+                                        @endif
+                                    </span>
                                 </div>
                             </div>
                             <div class="col-md-6">

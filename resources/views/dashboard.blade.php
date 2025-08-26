@@ -107,7 +107,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
-                    <a href="#" class="text-decoration-none small">
+                    <a href="{{ route('classes.index') }}" class="text-decoration-none small">
                         View all classes <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>

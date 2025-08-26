@@ -77,13 +77,13 @@
             <i class="bi bi-building"></i> Classes
         </a>
         <div class="collapse {{ request()->routeIs('classes.*') ? 'show' : '' }}" id="classesSubmenu">
-            @can('create classes')
+            @can('create', App\Models\SchoolClass::class)
             <a href="{{ route('classes.create') }}" class="list-group-item list-group-item-action ps-4 {{ request()->routeIs('classes.create') ? 'active' : '' }}">
                 <i class="bi bi-plus-circle"></i> Add Class
             </a>
             @endcan
-            @can('view classes')
-            <a href="{{ route('classes.index') }}" class="list-group-item list-group-item-action ps-4 {{ request()->routeIs('classes.index') ? 'active' : '' }}">
+            @can('viewAny', App\Models\SchoolClass::class)
+            <a href="{{ route('classes.index') }}" class="list-group-item list-group-item-action ps-4 {{ request()->routeIs('classes.index') ? 'active' : '' }}" onclick="event.stopPropagation()">
                 <i class="bi bi-list-ul"></i> View All Classes
             </a>
             @endcan
